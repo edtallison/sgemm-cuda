@@ -34,14 +34,14 @@ Credit goes to [wangzyon/NVIDIA_SGEMM_PRACTICE](https://github.com/wangzyon/NVID
     - `threadIdx.x/y/z `specifies the thread's position in the block.
     - When used within a kernel, these vars are automatically assigned by the CUDA runtime.
 
-**Matrix multiplication**
+- **Matrix multiplication**
     - Matrix multiplication: element ij of C is the dot product of row i of A and column j of B.
     - In this kernel, each thread computes one element of C. This can obviously be done in parallel so no synchronisation is required.
 
-**Kernel launch**
+- **Kernel launch**
     - When the kernel is launched, we make the grid as big as necessary to cover all of C, depending on the block size.
     - The kernel execution is launched asynchronously i.e. the function call on the host (CPU) returns immediately.
 
-**Memory access pattern**
+- **Memory access pattern**
     - Threads within the same block e.g. ThreadIds (0, 0) and (0, 1) use the same column of B.
     - They each load the whole column from global memory. Hmmm this seems inefficient...
