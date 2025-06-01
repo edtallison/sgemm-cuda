@@ -8,7 +8,9 @@
 
 template <const uint BLOCKSIZE>
 // __global__ is used to specify that the function is run on GPU, called by host (CPU)
-__global__ void sgemm_global_mem_coalesce() {
+__global__ void sgemm_global_mem_coalesce(int M, int N, int K, float alpha,
+                                          const float *A, const float *B,
+                                          float beta, float *C) {
     const int cRow = blockIdx.x * BLOCKSIZE + (threadIdx.x / BLOCKSIZE); // I like this row, col var naming
     const int cCol = blockIdx.y * BLOCKSIZE + (threadIdx.x % BLOCKSIZE);
 
