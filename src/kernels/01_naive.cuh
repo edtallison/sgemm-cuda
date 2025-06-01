@@ -25,7 +25,7 @@ __global__ void sgemm_naive(
     // we don't want those leftover threads to do anything (tile quantisation)
     if (x < M && y < N) {
         float tmp = 0.0;
-        for (int i = 0; i < K; i++) { // K is the size of the row in A, col in B i.e. the dot product
+        for (int i = 0; i < K; ++i) { // K is the size of the row in A, col in B i.e. the dot product
             // A: x * K gives the start of relevant row, i enumerates across the row (col by col)
             // B: y gives the relevant column, i * N enumerates down the column, (row by row)
             tmp += A[x * K + i] * B[i * N + y];
