@@ -4,7 +4,7 @@ Following the [article](https://siboehm.com/articles/22/CUDA-MMM), for my learni
 
 ## Run on Google Colab
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/edtallison/sgemm-cuda/blob/main/run_on_colab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/edtallison/sgemm-cuda/blob/master/run_on_colab.ipynb)
 
 Click the link above to open and run the project in a GPU-enabled Google Colab environment. No additional setup required.
 
