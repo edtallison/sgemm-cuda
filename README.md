@@ -22,25 +22,25 @@ Credit goes to [wangzyon/NVIDIA_SGEMM_PRACTICE](https://github.com/wangzyon/NVID
 
 ## 1. Naive
 
-Three-level hierarchy of computation - grid, block, thread. Assume grid and block are 2D, thread is the atomic unit of computation.
+- Three-level hierarchy of computation - grid, block, thread. Assume grid and block are 2D, thread is the atomic unit of computation.
 
-Blocks can have up to 1024 threads.
+- Blocks can have up to 1024 threads.
 
-Threads within the same block share memory (SMEM).
+- Threads within the same block share memory (SMEM).
 
-gridDim specifies dimensions of the grid i.e. rows and columns of blocks.
+- gridDim specifies dimensions of the grid i.e. rows and columns of blocks.
 blockDim specifies dimensions of the block i.e. rows and columns of threads.
 
-blockIdx.x/y/z specifies the block's position in the grid.
-threadIdx.x/y/z specifies the thread's position in the block.
-When these are used within a kernel, they are automatically assigned by the CUDA runtime.
+- blockIdx.x/y/z specifies the block's position in the grid.
+- threadIdx.x/y/z specifies the thread's position in the block.
+- When these are used within a kernel, they are automatically assigned by the CUDA runtime.
 
-Matrix multiplication: element ij of C is the dot product of row i of A and column j of B.
+- Matrix multiplication: element ij of C is the dot product of row i of A and column j of B.
 
-In this kernel, each thread computes one element of C. This can obviously be done in parallel so no synchronisation is required.
+- In this kernel, each thread computes one element of C. This can obviously be done in parallel so no synchronisation is required.
 
-When the kernel is launched, we make the grid as big as necessary to cover all of C, depending on the block size.
+- When the kernel is launched, we make the grid as big as necessary to cover all of C, depending on the block size.
 
-The kernel execution is launched asynchronously i.e. the function call on the host (CPU) returns immediately.
+- The kernel execution is launched asynchronously i.e. the function call on the host (CPU) returns immediately.
 
-Memory access pattern: threads within the same block e.g. ThreadIds (0, 0) and (0, 1) use the same column of B, but they each load the whole column from global memory. Hmmm this seems inefficient...
+- Memory access pattern: threads within the same block e.g. ThreadIds (0, 0) and (0, 1) use the same column of B, but they each load the whole column from global memory. Hmmm this seems inefficient...
