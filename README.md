@@ -34,5 +34,25 @@ Click the link above to open and run the project in a GPU-enabled Google Colab e
     - The kernel execution is launched asynchronously i.e. the function call on the host (CPU) returns immediately.
 
 - **Memory access pattern**
-    - Threads within the same block e.g. ThreadIds (0, 0) and (0, 1) use the same column of B.
+    - Threads within the same block e.g. `threadIds` (0, 0) and (0, 1) use the same column of B.
     - They each load the whole column from global memory. Hmmm this seems inefficient...
+
+## 2. Global Memory Coalescing
+
+- **Warps**
+    - In execution, within a block, threads are grouped into "warps" of 32 threads.
+    - Each streaming multiprocessor (SM) has four warp schedulers - physical cores that execute instructions.
+    - Each warp is assigned to a warp scheduler, based on a consecutive `threadId` (x, y, z).
+    - Threads with neighbouring `threadId` become part of the same warp.
+
+- **Global Memory Coalescing**
+    - Sequential memory acceses by threads in the same warp can be grouped and executed as one.
+    - Important to keep in mind when optimising GMEM memory access.
+    - For coalescing, the memory addresses need to be consecutive, but the within-warp accesses don't need to be consecutive.
+    - GPU supports 32B, 64B, and 128B memory accesses.
+
+- **Memory Access Pattern**
+    (this part took me some time to get my head around)
+    - In naive kernel, iterating threads with `threadIdx.x` (which aligns with consecutive `threadId`) actually leads to consecutive threads operating on consecutive rows of A, and the same row of B
+    - If, instead, the threads operated on the same row of A but consecutive columns of B, this accessing of the B values could be coalesced.
+    - This is achieved simply by changing the x and y position indices of the C element computed by each thread.
